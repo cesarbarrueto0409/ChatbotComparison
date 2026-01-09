@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>ChatBot Comparative</title>
+  <link rel="stylesheet" href="styles.css" /> <!-- Reference styles.css -->
+</head>
+<body>
+  <div class="app">
+    <h1>Comparative Chat</h1>
+    <h2>Azure vs AWS Bedrock</h2>
+
+    <!-- Chat Containers -->
+
+    <!-- Azure Container -->
+    <div class="chat-container">
+      <div class="chat-column">
+        <h2>Azure</h2>
+        <div id="azureChat" class="chat-box"></div>
+      </div>
+
+      <!-- AWS Container -->
+      <div class="chat-column">
+        <h2>AWS Bedrock</h2>
+        <div id="awsChat" class="chat-box"></div>
+      </div>
+    </div>
+
+    <!-- Input Section -->
+    <div class="input-container">
+      <input
+        type="text"
+        id="userInput"
+        placeholder="Write your message here..."
+      />
+      <button id="sendBtn">Send</button>
+    </div>
+  </div>
+
+  <!-- Reference script.js -->
+  <script src="script.js"></script>
+</body>
+</html>
