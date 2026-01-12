@@ -111,5 +111,3 @@ uvicorn app.main:app --host 0.0.0.0 --port 3000 --reload
 - Consider enabling authentication for Redis and protecting MongoDB access.
 
 ---
-
-If you want, I can add `.gitignore` and `.env.example`, and help remove any committed `.env` from git history.
