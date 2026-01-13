@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Script Loading</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #f0f0f0; }
+        .status { padding: 10px; margin: 5px 0; border-radius: 5px; }
+        .loaded { background: #d4edda; color: #155724; }
+        .missing { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        pre { background: white; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Script Loading Debug</h1>
+    <div id="status"></div>
+    
+    <h2>📋 Loading Order</h2>
+    <div id="loading-order"></div>
+    
+    <h2>🧪 Test Results</h2>
+    <div id="test-results"></div>
+
+    <!-- Load scripts in same order as main app -->
+    <script>
+        const loadingOrder = [];
+        const originalLog = console.log;
+        console.log = function(...args) {
+            loadingOrder.push(new Date().toISOString() + ': ' + args.join(' '));
+            originalLog.apply(console, args);
+        };
+    </script>
+    
+    <script src="js/utils/api.js"></script>
+    <script>console.log('✅ api.js loaded');</script>
+    
+    <script src="js/utils/ui.js"></script>
+    <script>console.log('✅ ui.js loaded');</script>
+    
+    <script src="js/states/UserSelectionState.js"></script>
+    <script>console.log('✅ UserSelectionState.js loaded');</script>
+    
+    <script src="js/states/AISelectionState.js"></script>
+    <script>console.log('✅ AISelectionState.js loaded');</script>
+    
+    <script src="js/states/ChatComparisonState.js"></script>
+    <script>console.log('✅ ChatComparisonState.js loaded');</script>
+    
+    <script src="js/StateManager.js"></script>
+    <script>console.log('✅ StateManager.js loaded');</script>
+
+    <script>
+        function checkStatus() {
+            const statusDiv = document.getElementById('status');
+            const loadingDiv = document.getElementById('loading-order');
+            const testDiv = document.getElementById('test-results');
+            
+            const requiredClasses = [
+                'UIUtils',
+                'UserSelectionState',
+                'AISelectionState', 
+                'ChatComparisonState',
+                'StateManager'
+            ];
+
+            let html = '<h2>📊 Class Status</h2>';
+            let allLoaded = true;
+            
+            requiredClasses.forEach(className => {
+                const exists = !!window[className];
+                const status = exists ? 'loaded' : 'missing';
+                const icon = exists ? '✅' : '❌';
+                html += `<div class="status ${status}">${icon} ${className}: ${exists ? 'Loaded' : 'Missing'}</div>`;
+                if (!exists) allLoaded = false;
+            });
+            
+            const apiExists = !!window.apiClient;
+            const apiStatus = apiExists ? 'loaded' : 'missing';
+            const apiIcon = apiExists ? '✅' : '❌';
+            html += `<div class="status ${apiStatus}">${apiIcon} apiClient: ${apiExists ? 'Loaded' : 'Missing'}</div>`;
+            
+            statusDiv.innerHTML = html;
+            
+            // Show loading order
+            loadingDiv.innerHTML = '<pre>' + loadingOrder.join('\n') + '</pre>';
+            
+            // Test results
+            let testHtml = '';
+            if (allLoaded && apiExists) {
+                testHtml += '<div class="status loaded">🎉 All classes loaded successfully!</div>';
+                
+                try {
+                    const stateManager = new StateManager();
+                    testHtml += '<div class="status loaded">✅ StateManager can be instantiated</div>';
+                } catch (error) {
+                    testHtml += `<div class="status missing">❌ StateManager instantiation failed: ${error.message}</div>`;
+                }
+            } else {
+                testHtml += '<div class="status missing">❌ Some classes are missing</div>';
+            }
+            
+            testDiv.innerHTML = testHtml;
+        }
+        
+        // Check status after a short delay
+        setTimeout(checkStatus, 100);
+        
+        // Also check on window load
+        window.addEventListener('load', () => {
+            setTimeout(checkStatus, 100);
+        });
+    </script>
+</body>
+</html>
