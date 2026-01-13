@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Simple Loading</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .status { padding: 10px; margin: 5px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Simple Test</h1>
+    <div id="results"></div>
+
+    <script>
+        function log(message, isError = false) {
+            const div = document.createElement('div');
+            div.className = `status ${isError ? 'error' : 'success'}`;
+            div.textContent = message;
+            document.getElementById('results').appendChild(div);
+            console.log(message);
+        }
+
+        // Test 1: Load API client
+        log('Loading API client...');
+    </script>
+    
+    <script src="js/utils/api.js"></script>
+    <script>
+        if (window.apiClient) {
+            log('✅ API client loaded');
+        } else {
+            log('❌ API client failed to load', true);
+        }
+    </script>
+
+    <script src="js/utils/ui.js"></script>
+    <script>
+        if (window.UIUtils) {
+            log('✅ UIUtils loaded');
+        } else {
+            log('❌ UIUtils failed to load', true);
+        }
+    </script>
+
+    <script src="js/states/UserSelectionState.js"></script>
+    <script>
+        if (window.UserSelectionState) {
+            log('✅ UserSelectionState loaded');
+            try {
+                const test = new UserSelectionState();
+                log('✅ UserSelectionState can be instantiated');
+            } catch (error) {
+                log('❌ UserSelectionState instantiation failed: ' + error.message, true);
+            }
+        } else {
+            log('❌ UserSelectionState failed to load', true);
+        }
+    </script>
+
+    <script src="js/states/AISelectionState.js"></script>
+    <script>
+        if (window.AISelectionState) {
+            log('✅ AISelectionState loaded');
+        } else {
+            log('❌ AISelectionState failed to load', true);
+        }
+    </script>
+
+    <script src="js/states/ChatComparisonState.js"></script>
+    <script>
+        if (window.ChatComparisonState) {
+            log('✅ ChatComparisonState loaded');
+        } else {
+            log('❌ ChatComparisonState failed to load', true);
+        }
+    </script>
+
+    <script src="js/StateManager.js"></script>
+    <script>
+        if (window.StateManager) {
+            log('✅ StateManager class loaded');
+            try {
+                const testManager = new StateManager();
+                log('✅ StateManager can be instantiated');
+            } catch (error) {
+                log('❌ StateManager instantiation failed: ' + error.message, true);
+            }
+        } else {
+            log('❌ StateManager failed to load', true);
+        }
+    </script>
+
+    <script>
+        // Final test
+        setTimeout(() => {
+            log('🏁 Test completed');
+            
+            // Test API call
+            if (window.apiClient) {
+                log('Testing API call...');
+                apiClient.healthCheck()
+                    .then(result => {
+                        log('✅ API call successful: ' + JSON.stringify(result));
+                    })
+                    .catch(error => {
+                        log('❌ API call failed: ' + error.message, true);
+                    });
+            }
+        }, 500);
+    </script>
+</body>
+</html>
