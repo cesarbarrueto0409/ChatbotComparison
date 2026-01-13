@@ -1,43 +1,189 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>ChatBot Comparative</title>
-  <link rel="stylesheet" href="styles.css" /> <!-- Reference styles.css -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot Comparison Platform</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/states.css">
 </head>
 <body>
-  <div class="app">
-    <h1>Comparative Chat</h1>
-    <h2>Azure vs AWS Bedrock</h2>
+    <div id="app">
+        <!-- Header -->
+        <header class="app-header">
+            <h1>AI Chatbot Comparison Platform</h1>
+            <div class="progress-indicator">
+                <div class="step active" data-step="1">
+                    <span class="step-number">1</span>
+                    <span class="step-label">User</span>
+                </div>
+                <div class="step" data-step="2">
+                    <span class="step-number">2</span>
+                    <span class="step-label">AI Models</span>
+                </div>
+                <div class="step" data-step="3">
+                    <span class="step-number">3</span>
+                    <span class="step-label">Comparison</span>
+                </div>
+            </div>
+        </header>
 
-    <!-- Chat Containers -->
+        <!-- Main Content -->
+        <main class="app-main">
+            <!-- State 1: User Selection -->
+            <div id="user-selection-state" class="state-container active">
+                <div class="state-content">
+                    <h2>User Selection</h2>
+                    
+                    <!-- Existing Sessions -->
+                    <div class="section">
+                        <h3>Existing Sessions</h3>
+                        <div id="existing-sessions" class="sessions-grid">
+                            <div class="loading">Loading sessions...</div>
+                        </div>
+                    </div>
 
-    <!-- Azure Container -->
-    <div class="chat-container">
-      <div class="chat-column">
-        <h2>Azure</h2>
-        <div id="azureChat" class="chat-box"></div>
-      </div>
+                    <!-- Create New Session -->
+                    <div class="section">
+                        <h3>Create New Session</h3>
+                        <form id="new-session-form" class="form-container">
+                            <div class="form-group">
+                                <label for="user-name">User Name:</label>
+                                <input type="text" id="user-name" name="name" required 
+                                       placeholder="Enter your name">
+                            </div>
+                            <div class="form-group">
+                                <label for="project-title">Project Title:</label>
+                                <input type="text" id="project-title" name="project_title" required 
+                                       placeholder="Unique project name">
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                Create New Session
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
-      <!-- AWS Container -->
-      <div class="chat-column">
-        <h2>AWS Bedrock</h2>
-        <div id="awsChat" class="chat-box"></div>
-      </div>
+            <!-- State 2: AI Selection -->
+            <div id="ai-selection-state" class="state-container">
+                <div class="state-content">
+                    <h2>AI Model Selection</h2>
+                    
+                    <div class="user-info-display">
+                        <span id="current-user-info"></span>
+                    </div>
+
+                    <!-- First AI Selection -->
+                    <div class="section">
+                        <h3>Select First AI Model</h3>
+                        <div id="first-ai-options" class="ai-grid">
+                            <div class="loading">Loading AI options...</div>
+                        </div>
+                    </div>
+
+                    <!-- Second AI Selection -->
+                    <div class="section" id="second-ai-section" style="display: none;">
+                        <h3>Select Second AI Model for Comparison</h3>
+                        <div id="second-ai-options" class="ai-grid">
+                        </div>
+                    </div>
+
+                    <div class="navigation-buttons">
+                        <button id="back-to-user" class="btn btn-secondary">
+                            Back to User
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- State 3: Chat Comparison -->
+            <div id="chat-comparison-state" class="state-container">
+                <div class="state-content">
+                    <h2>AI Model Comparison</h2>
+                    
+                    <!-- Session Info -->
+                    <div class="session-info">
+                        <div class="info-item">
+                            <strong>User:</strong> <span id="chat-user-name"></span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Project:</strong> <span id="chat-project-title"></span>
+                        </div>
+                        <div class="info-item">
+                            <strong>AI Models:</strong> <span id="chat-ai-names"></span>
+                        </div>
+                    </div>
+
+                    <!-- Chat Interface -->
+                    <div class="chat-container">
+                        <div class="chat-responses">
+                            <div class="ai-response-column" id="ai-1-column">
+                                <div class="ai-header">
+                                    <h4 id="ai-1-name">AI Model 1</h4>
+                                    <div class="ai-status" id="ai-1-status">Ready</div>
+                                </div>
+                                <div class="messages-container" id="ai-1-messages">
+                                </div>
+                            </div>
+                            
+                            <div class="ai-response-column" id="ai-2-column">
+                                <div class="ai-header">
+                                    <h4 id="ai-2-name">AI Model 2</h4>
+                                    <div class="ai-status" id="ai-2-status">Ready</div>
+                                </div>
+                                <div class="messages-container" id="ai-2-messages">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Message Input -->
+                        <div class="message-input-container">
+                            <form id="message-form" class="message-form">
+                                <input type="text" id="message-input" placeholder="Type your message..." required>
+                                <button type="submit" class="btn btn-primary" id="send-button">
+                                    Send
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="navigation-buttons">
+                        <button id="back-to-ai" class="btn btn-secondary">
+                            Change AI Models
+                        </button>
+                        <button id="new-session" class="btn btn-secondary">
+                            New Session
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Loading Overlay -->
+        <div id="loading-overlay" class="loading-overlay" style="display: none;">
+            <div class="loading-spinner"></div>
+            <p>Processing...</p>
+        </div>
+
+        <!-- Error Modal -->
+        <div id="error-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <h3>Error</h3>
+                <p id="error-message"></p>
+                <button id="close-error" class="btn btn-primary">Close</button>
+            </div>
+        </div>
     </div>
 
-    <!-- Input Section -->
-    <div class="input-container">
-      <input
-        type="text"
-        id="userInput"
-        placeholder="Write your message here..."
-      />
-      <button id="sendBtn">Send</button>
-    </div>
-  </div>
-
-  <!-- Reference script.js -->
-  <script src="script.js"></script>
+    <!-- Scripts -->
+    <script src="js/utils/api.js"></script>
+    <script src="js/utils/ui.js"></script>
+    <script src="js/states/UserSelectionState.js"></script>
+    <script src="js/states/AISelectionState.js"></script>
+    <script src="js/states/ChatComparisonState.js"></script>
+    <script src="js/StateManager.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
