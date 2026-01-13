@@ -1,5 +1,9 @@
 .env
 .env.*
+
+# Security audit (may contain sensitive info)
+SECURITY_AUDIT.md
+
 # Virtual environments
 .venv/
 venv/
